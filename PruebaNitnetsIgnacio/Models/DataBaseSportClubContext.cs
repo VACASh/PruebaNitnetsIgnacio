@@ -1,9 +1,6 @@
 ﻿using System;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace PruebaNitnetsIgnacio.Models
 {
@@ -24,10 +21,8 @@ namespace PruebaNitnetsIgnacio.Models
         public virtual DbSet<Socios> Socios { get; set; }
         public virtual DbSet<Usuarios> Usuarios { get; set; }
 
-
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-
             if (!optionsBuilder.IsConfigured)
             {
                 //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
@@ -79,6 +74,15 @@ namespace PruebaNitnetsIgnacio.Models
 
                 entity.Property(e => e.IdCourt).HasColumnName("idCourt");
 
+                entity.Property(e => e.KindSport)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.TimeEnd).HasColumnName("timeEnd");
+
+                entity.Property(e => e.TimeStart).HasColumnName("timeStart");
+
                 entity.HasOne(d => d.IdCourtNavigation)
                     .WithMany(p => p.Reservas)
                     .HasForeignKey(d => d.IdCourt)
@@ -90,6 +94,12 @@ namespace PruebaNitnetsIgnacio.Models
                     .HasForeignKey(d => d.IdMember)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Reservas_ToSocios");
+
+                entity.HasOne(d => d.KindSportNavigation)
+                    .WithMany(p => p.Reservas)
+                    .HasForeignKey(d => d.KindSport)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Reservas_ToDeportes");
             });
 
             modelBuilder.Entity<Socios>(entity =>
