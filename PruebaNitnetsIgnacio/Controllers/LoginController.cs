@@ -26,27 +26,13 @@ namespace PruebaNitnetsIgnacio.Controllers
             this.configuration = configuration;
         }
 
-        // GET: api/Login
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET: api/Login/5
-        [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
         // POST: api/Login
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Login(Usuarios usuarioLogin)
+        public async Task<IActionResult> Login(Usuarios userLogin)
         {
 
-            var _userInfo = await AutenticarUsuarioAsync(usuarioLogin);
+            var _userInfo = await AutenticarUsuarioAsync(userLogin);
             if (_userInfo != null)
             {
                 return Ok(new { token = GenerarTokenJWT(_userInfo) });
@@ -55,19 +41,6 @@ namespace PruebaNitnetsIgnacio.Controllers
             {
                 return Unauthorized();
             }
-        }
-
-
-        // PUT: api/Login/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE: api/ApiWithActions/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
 
         // COMPROBAMOS SI EL USUARIO EXISTE EN LA BASE DE DATOS 
