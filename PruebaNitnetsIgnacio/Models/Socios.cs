@@ -19,6 +19,7 @@ namespace PruebaNitnetsIgnacio.Models
         public string AdressNumber { get; set; }
         public int? AddressFloor { get; set; }
         public string ZipCode { get; set; }
+        public string Email { get; set; }
 
         public virtual ICollection<Reservas> Reservas { get; set; }
     }

@@ -1,6 +1,9 @@
 ﻿using System;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace PruebaNitnetsIgnacio.Models
 {
@@ -21,8 +24,10 @@ namespace PruebaNitnetsIgnacio.Models
         public virtual DbSet<Socios> Socios { get; set; }
         public virtual DbSet<Usuarios> Usuarios { get; set; }
 
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+
             if (!optionsBuilder.IsConfigured)
             {
                 //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
@@ -104,6 +109,11 @@ namespace PruebaNitnetsIgnacio.Models
                     .HasMaxLength(10)
                     .IsUnicode(false);
 
+                entity.Property(e => e.Email)
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.FirstSurname)
                     .IsRequired()
                     .HasMaxLength(50)
@@ -131,17 +141,32 @@ namespace PruebaNitnetsIgnacio.Models
 
             modelBuilder.Entity<Usuarios>(entity =>
             {
-                entity.HasKey(e => e.IdUser)
-                    .HasName("PK__Usuarios__B7C926380793B8D2");
-
-                entity.Property(e => e.IdUser).ValueGeneratedNever();
+                entity.HasKey(e => e.Login)
+                    .HasName("PK__tmp_ms_x__5E55825A2B4808D5");
 
                 entity.Property(e => e.Login)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Dni)
+                    .IsRequired()
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Email)
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Password).IsRequired();
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Password)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
             });
 
             OnModelCreatingPartial(modelBuilder);
