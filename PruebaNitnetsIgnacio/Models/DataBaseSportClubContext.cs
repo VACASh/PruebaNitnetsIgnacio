@@ -70,7 +70,7 @@ namespace PruebaNitnetsIgnacio.Models
                 entity.HasKey(e => e.IdReservation)
                     .HasName("PK__Reservas__7E69A57B0B485B93");
 
-                entity.Property(e => e.DateReservation).HasColumnType("date");
+                entity.Property(e => e.DateReservation).HasColumnType("datetime");
 
                 entity.Property(e => e.IdCourt).HasColumnName("idCourt");
 
@@ -78,10 +78,6 @@ namespace PruebaNitnetsIgnacio.Models
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
-
-                entity.Property(e => e.TimeEnd).HasColumnName("timeEnd");
-
-                entity.Property(e => e.TimeStart).HasColumnName("timeStart");
 
                 entity.HasOne(d => d.IdCourtNavigation)
                     .WithMany(p => p.Reservas)
