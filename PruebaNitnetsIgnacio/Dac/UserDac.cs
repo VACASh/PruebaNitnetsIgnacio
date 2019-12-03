@@ -12,7 +12,32 @@ namespace PruebaNitnetsIgnacio.Dac
 
 
 
-        internal static Usuarios isCorrectLogin(Usuarios user)
+        //CRUD
+        internal static Usuarios CreateUser(Usuarios userToRegister)
+        {
+            Usuarios userRegistered = new Usuarios();
+            using (DataBaseSportClubContext dbSportContext = new DataBaseSportClubContext())
+            {
+                dbSportContext.Usuarios.Add(new Usuarios
+                {
+                    Dni = userToRegister.Dni,
+                    Email = userToRegister.Email,
+                    Login = userToRegister.Login,
+                    Password = userToRegister.Password,
+                    Name = userToRegister.Name
+                });
+                if (dbSportContext.SaveChanges() > 0)
+                {
+                    return userToRegister;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+
+        internal static Usuarios ReadUser(Usuarios user)
         {
             Usuarios userLogin = new Usuarios();
             try
@@ -27,11 +52,59 @@ namespace PruebaNitnetsIgnacio.Dac
             catch (DbException ex)
             {
                 //capturar excepcion y guardar en bdd el usuario y el porque de la excepción 
-                return null; ;
+                return null;
             }
 
         }
 
+        internal static bool UpdateUser(Usuarios user)
+        {
+            Usuarios userLogin = new Usuarios();
+            try
+            {
+                using (DataBaseSportClubContext dbSportContext = new DataBaseSportClubContext())
+                {
+                    userLogin = dbSportContext.Usuarios.Find(user.Login);
+                    userLogin.Dni = user.Dni != null ? user.Dni : userLogin.Dni;
+                    userLogin.Email = user.Email != null ? user.Email : userLogin.Email;
+                    userLogin.Name = user.Name != null ? user.Name : userLogin.Name;
+                    userLogin.Password = user.Password != null ? user.Password : userLogin.Password;
+
+
+                    return dbSportContext.SaveChanges() > 0 ? true : false;
+
+                }
+            }
+            catch (DbException ex)
+            {
+                //capturar excepcion y guardar en bdd el usuario y el porque de la excepción 
+                return false;
+            }
+
+        }
+
+        internal static bool DeleteUser(Usuarios user)
+        {
+            Usuarios userLogin = new Usuarios();
+            try
+            {
+                using (DataBaseSportClubContext dbSportContext = new DataBaseSportClubContext())
+                {
+                    dbSportContext.Remove(user.Login);
+
+                    return dbSportContext.SaveChanges() > 0 ? true : false;
+                }
+            }
+            catch (DbException ex)
+            {
+                //capturar excepcion y guardar en bdd el usuario y el porque de la excepción 
+                return false;
+            }
+
+        }
+
+
+        //Extras
         internal static bool existUserLogin(string login)
         {
             Usuarios user = new Usuarios();
@@ -68,30 +141,7 @@ namespace PruebaNitnetsIgnacio.Dac
             }
         }
 
-        internal static Usuarios RegisterUser(Usuarios userToRegister)
-        {
-            Usuarios userRegistered = new Usuarios();
-            using (DataBaseSportClubContext dbSportContext = new DataBaseSportClubContext())
-            {
-                dbSportContext.Usuarios.Add(new Usuarios
-                {
-                    Dni = userToRegister.Dni,
-                    Email = userToRegister.Email,
-                    Login = userToRegister.Login,
-                    Password = userToRegister.Password,
-                    Name = userToRegister.Name
-                });
-                if (dbSportContext.SaveChanges() >0)
-                {
-                    return userToRegister;
-                }
-                else
-                {
-                    return null;
-                }
-            }
-          
-        }
+
 
         internal static bool existUserDni(string dni)
         {

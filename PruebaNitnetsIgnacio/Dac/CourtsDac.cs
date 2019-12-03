@@ -20,6 +20,105 @@ namespace PruebaNitnetsIgnacio.Dac
                 return allCourtsByKindSport;
             }
         }
+
+        internal static Pistas GetCourt(int idCourt)
+        {
+            using (DataBaseSportClubContext dataBaseSportClub = new DataBaseSportClubContext())
+            {
+                return dataBaseSportClub.Pistas.Find(idCourt);
+            }
+        }
+
+        internal static List<Pistas> GetCourts()
+        {
+            using (DataBaseSportClubContext dataBaseSportClub = new DataBaseSportClubContext())
+            {
+                return dataBaseSportClub.Pistas.ToList();
+            }
+        }
+
+        internal static bool InsertNewCourt(Pistas court)
+        {
+            using (DataBaseSportClubContext dataBaseSportClub = new DataBaseSportClubContext())
+            {
+                try
+                {
+                    dataBaseSportClub.Pistas.Add(
+                    court
+                    );
+                    return dataBaseSportClub.SaveChanges() > 0 ? true : false;
+                }
+                catch (Exception ex)
+                {
+
+                    return false;
+                }
+
+            }
+        }
+
+        internal static bool DeleteMember(Socios member)
+        {
+            using (DataBaseSportClubContext dataBaseSportClub = new DataBaseSportClubContext())
+            {
+                try
+                {
+                    dataBaseSportClub.Socios.Remove(
+                    member
+                    );
+                    return dataBaseSportClub.SaveChanges() > 0 ? true : false;
+                }
+                catch (Exception ex)
+                {
+
+                    return false;
+                }
+
+            }
+        }
+
+        internal static bool DeleteCourt(Pistas court)
+        {
+            using (DataBaseSportClubContext dataBaseSportClub = new DataBaseSportClubContext())
+            {
+                try
+                {
+                    dataBaseSportClub.Pistas.Remove(
+                    court
+                    );
+                    return dataBaseSportClub.SaveChanges() > 0 ? true : false;
+                }
+                catch (Exception ex)
+                {
+
+                    return false;
+                }
+
+            }
+        }
+
+        internal static bool UpdateCourt(Pistas court)
+        {
+
+            Pistas courtToModify = new Pistas();
+            using (DataBaseSportClubContext dataBaseSportClub = new DataBaseSportClubContext())
+            {
+                try
+                {
+                    courtToModify = dataBaseSportClub.Pistas.Find(court.IdCourt);
+                    courtToModify.KindSport = court.KindSport;
+
+                    return dataBaseSportClub.SaveChanges() > 0 ? true : false;
+
+                }
+                catch (Exception ex)
+                {
+                    return false;
+                }
+            }
+
+
+        }
     }
-    
+
 }

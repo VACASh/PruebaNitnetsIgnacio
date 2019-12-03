@@ -25,7 +25,7 @@ namespace PruebaNitnetsIgnacio.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-                //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
                 optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=DataBaseSportClub;Trusted_Connection=True;");
             }
         }
@@ -49,9 +49,7 @@ namespace PruebaNitnetsIgnacio.Models
             modelBuilder.Entity<Pistas>(entity =>
             {
                 entity.HasKey(e => e.IdCourt)
-                    .HasName("PK__Pistas__FDA5205DC6F11F1A");
-
-                entity.Property(e => e.IdCourt).ValueGeneratedNever();
+                    .HasName("PK__tmp_ms_x__FDA5205D0F3255E0");
 
                 entity.Property(e => e.KindSport)
                     .IsRequired()
@@ -101,9 +99,7 @@ namespace PruebaNitnetsIgnacio.Models
             modelBuilder.Entity<Socios>(entity =>
             {
                 entity.HasKey(e => e.IdMember)
-                    .HasName("PK__Socios__570E7FF09F50047A");
-
-                entity.Property(e => e.IdMember).ValueGeneratedNever();
+                    .HasName("PK__tmp_ms_x__570E7FF0B8478052");
 
                 entity.Property(e => e.AddressStreet)
                     .IsRequired()

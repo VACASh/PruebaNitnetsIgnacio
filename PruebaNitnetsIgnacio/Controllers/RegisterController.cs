@@ -57,7 +57,7 @@ namespace PruebaNitnetsIgnacio.Controllers
                         }
                         else
                         {
-                            userRegisteered = UserDac.RegisterUser(userToRegister);
+                            userRegisteered = UserDac.CreateUser(userToRegister);
 
                             if (userRegisteered == null)
                             {

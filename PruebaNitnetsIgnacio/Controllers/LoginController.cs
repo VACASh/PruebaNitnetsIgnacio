@@ -50,7 +50,7 @@ namespace PruebaNitnetsIgnacio.Controllers
 
             using (DataBaseSportClubContext dbContext = new DataBaseSportClubContext())
             {
-                user = UserDac.isCorrectLogin(userLogin);
+                user = UserDac.ReadUser(userLogin);
             }
 
             return user;
