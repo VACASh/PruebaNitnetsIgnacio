@@ -60,7 +60,7 @@ namespace PruebaNitnetsIgnacio.Controllers
                     isAvilableCourt = true;
                     break;
                 }
-                
+
             }
 
             if (availableCourts != null && isAvilableCourt)
@@ -94,32 +94,46 @@ namespace PruebaNitnetsIgnacio.Controllers
         public IActionResult ModifyReservation(Reservas reservas)
         {
             Reservas reservation = ReservationDac.GetReservation(reservas.IdReservation);
-            Pistas courts = CourtsDac.GetCourt(reservas.IdCourt);
+            Pistas court = CourtsDac.GetCourt(reservas.IdCourt);
             List<Reservas> reservationListDays = new List<Reservas>();
             reservationListDays = ReservationList(reservas);
+            bool isBadRequest;
+            bool isCorrectTime;
 
-            if (reservationListDays.Find(
-                r => r.KindSport == reservas.KindSport
-                && r.IdCourt == reservas.IdCourt
-                && r.DateReservation == reservas.DateReservation)
-                != null || courts == null || reservation == null)
+            isBadRequest = (court == null || court.KindSport != reservas.KindSport || reservation == null || reservation.IdMember != reservas.IdMember);
+            isCorrectTime = (reservas.DateReservation.TimeOfDay.TotalHours >= Constants.MINHOUR
+                    && reservas.DateReservation.TimeOfDay.TotalHours <= Constants.MAXHOUR);
+
+            if (isBadRequest || !isCorrectTime)
             {
                 return Unauthorized();
             }
             else
             {
-                try
+                if (reservationListDays.Find(
+               r => r.IdCourt == reservas.IdCourt
+               && r.DateReservation == reservas.DateReservation)
+               != null || court == null || reservation == null)
                 {
-                    ReservationDac.UpdateReservation(reservas);
-                    return Ok();
+                    return Unauthorized();
                 }
-                catch (Exception ex)
+                else
                 {
+                    try
+                    {
+                        ReservationDac.UpdateReservation(reservas);
+                        return Ok();
+                    }
+                    catch (Exception ex)
+                    {
 
-                    return Conflict();
+                        return Conflict();
+                    }
+
                 }
-               
             }
+
+
 
 
         }
@@ -142,6 +156,6 @@ namespace PruebaNitnetsIgnacio.Controllers
             return dayReservations;
         }
 
-       
+
     }
 }
