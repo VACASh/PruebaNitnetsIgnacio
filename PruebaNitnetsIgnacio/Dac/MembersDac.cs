@@ -19,31 +19,33 @@ namespace PruebaNitnetsIgnacio.Dac
             }
         }
 
-        internal static object CreateMember(Socios usuario)
+        internal static bool CreateMember(Socios newMember)
         {
             Socios memberRegistered = new Socios();
             using (DataBaseSportClubContext dbSportContext = new DataBaseSportClubContext())
             {
-                dbSportContext.Socios.Add(new Socios
+                try
                 {
-                    AddressFloor = usuario.AddressFloor,
-                    AddressStreet = usuario.AddressStreet,
-                    AdressNumber = usuario.AdressNumber,
-                    Email = usuario.Email,
-                    Name = usuario.Name,
-                    FirstSurname = usuario.FirstSurname,
-                    SecondSurname = usuario.SecondSurname,
-                    IdMember = usuario.IdMember,
-                    ZipCode = usuario.ZipCode
-                });
-                if (dbSportContext.SaveChanges() > 0)
-                {
-                    return memberRegistered;
+                    dbSportContext.Socios.Add(new Socios
+                    {
+                        AddressFloor = newMember.AddressFloor,
+                        AddressStreet = newMember.AddressStreet,
+                        AdressNumber = newMember.AdressNumber,
+                        Email = newMember.Email,
+                        Name = newMember.Name,
+                        FirstSurname = newMember.FirstSurname,
+                        SecondSurname = newMember.SecondSurname,
+                        ZipCode = newMember.ZipCode,
+                        IdentityNumber = newMember.IdentityNumber
+                    });
+                    return dbSportContext.SaveChanges() > 0 ? true : false;
                 }
-                else
+                catch (Exception ex)
                 {
-                    return null;
+                    return false;
+                   
                 }
+             
             }
         }
 

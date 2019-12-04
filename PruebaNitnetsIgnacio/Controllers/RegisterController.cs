@@ -19,7 +19,7 @@ namespace PruebaNitnetsIgnacio.Controllers
         // POST: api/Register
         [HttpPost]
         [AllowAnonymous]
-        public Usuarios Post(Usuarios userToRegister)
+        public IActionResult Createuser(Usuarios userToRegister)
         {
             bool isUserRegisted;
             bool isEmailRegisted;
@@ -32,20 +32,20 @@ namespace PruebaNitnetsIgnacio.Controllers
 
             if (!isCorrectJson)
             {
-                return userRegisteered;
+                return BadRequest();
             }
             else
             {
                 if (isUserRegisted)
                 {
-                    return userRegisteered;
+                    return Unauthorized();
                 }
                 else
                 {
                     isDniRegisted = registerUserDni(userToRegister.Dni);
                     if (isDniRegisted)
                     {
-                        return userRegisteered;
+                        return Unauthorized();
                     }
                     else
                     {
@@ -53,7 +53,7 @@ namespace PruebaNitnetsIgnacio.Controllers
 
                         if (isEmailRegisted)
                         {
-                            return userRegisteered;
+                            return Unauthorized();
                         }
                         else
                         {
@@ -61,11 +61,11 @@ namespace PruebaNitnetsIgnacio.Controllers
 
                             if (userRegisteered == null)
                             {
-                                return userRegisteered;
+                                return Conflict();
                             }
                             else
                             {
-                                return userRegisteered;
+                                return Ok();
                             }
                             
                         }
@@ -78,8 +78,11 @@ namespace PruebaNitnetsIgnacio.Controllers
 
         private bool verifyJson(Usuarios userToRegister)
         {
-            return !string.IsNullOrEmpty(userToRegister.Dni) && !string.IsNullOrEmpty(userToRegister.Email) && !string.IsNullOrEmpty(userToRegister.Login)
-                && !string.IsNullOrEmpty(userToRegister.Password) && !string.IsNullOrEmpty(userToRegister.Name);
+            return !string.IsNullOrEmpty(userToRegister.Dni) 
+                && !string.IsNullOrEmpty(userToRegister.Email) 
+                && !string.IsNullOrEmpty(userToRegister.Login)
+                && !string.IsNullOrEmpty(userToRegister.Password) 
+                && !string.IsNullOrEmpty(userToRegister.Name);
         }
 
         private bool registerUserLogin(string login)

@@ -43,7 +43,7 @@ namespace PruebaNitnetsIgnacio.Dac
             {
                 try
                 {
-                    dataBaseSportClub.Pistas.Add(
+                    dataBaseSportClub.Pistas.AddRange(
                     court
                     );
                     return dataBaseSportClub.SaveChanges() > 0 ? true : false;

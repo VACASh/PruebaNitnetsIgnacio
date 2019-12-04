@@ -22,19 +22,7 @@ namespace PruebaNitnetsIgnacio.Controllers
             this.configuration = configuration;
         }
 
-        // POST: api/Users
-        [HttpPost]
-        public IActionResult Post(Usuarios usuario)
-        {
-            if (UserDac.CreateUser(usuario) != null)
-            {
-                return Ok();
-            }
-            else
-            {
-                return Unauthorized();
-            }
-        }
+ 
         [HttpGet]
         public Usuarios Get(Usuarios usuario)
         {
@@ -66,9 +54,6 @@ namespace PruebaNitnetsIgnacio.Controllers
             }
         }
 
-        private bool verifyJson(Usuarios usuario)
-        {
-            return true;
-        }
+      
     }
 }

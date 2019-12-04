@@ -25,7 +25,7 @@ namespace PruebaNitnetsIgnacio.Controllers
         public IActionResult CreateNewMember(Socios member)
         {
 
-            if (MembersDac.CreateMember(member) != null)
+            if (MembersDac.CreateMember(member))
             {
                 return Ok();
             }
@@ -35,13 +35,13 @@ namespace PruebaNitnetsIgnacio.Controllers
             }
         }
 
-        // PUT: api/Members/5
+       
         [HttpPut()]
         public IActionResult UpdateMember(Socios member)
         {
             Socios memberExist = MembersDac.GetMember(member.IdMember);
             
-            if (memberExist == null )
+            if (memberExist != null )
             {
                 MembersDac.UpdateMember(member);
                 return Ok();
@@ -57,8 +57,8 @@ namespace PruebaNitnetsIgnacio.Controllers
         public IActionResult DeleteMember(Socios member)
         {
             Socios memberExist = MembersDac.GetMember(member.IdMember);
-           
-            if (memberExist == null )
+           List <Reservas> reservationsByMember = ReservationDac.GetReservationByMember(member.IdMember);
+            if (memberExist != null && (reservationsByMember.Count == 0 ||reservationsByMember == null))
             {
                 CourtsDac.DeleteMember(member);
                 return Ok();

@@ -47,11 +47,24 @@ namespace PruebaNitnetsIgnacio.Dac
             }
         }
 
+        internal static List<Reservas> GetReservationByMember(int idMember)
+        {
+            List<Reservas> courtsReserverdByMember = new List<Reservas>();
+
+            using (DataBaseSportClubContext dataBaseSportClub = new DataBaseSportClubContext())
+            {
+                courtsReserverdByMember = dataBaseSportClub.Reservas
+                    .Where(r => r.IdMember == idMember )
+                    .ToList();
+                return courtsReserverdByMember;
+            }
+        }
+
         internal static List <Reservas> GetAllReservationsCourts(int idCourt)
         {
             using (DataBaseSportClubContext dbSportContext = new DataBaseSportClubContext())
             {
-                return dbSportContext.Reservas.Where(r => r.DateReservation > DateTime.Now && r.IdCourt == idCourt).ToList();
+                return dbSportContext.Reservas.Where(r =>  r.IdCourt == idCourt).ToList();
 
             }
         }

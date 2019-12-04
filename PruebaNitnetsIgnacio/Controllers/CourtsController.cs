@@ -17,8 +17,7 @@ namespace PruebaNitnetsIgnacio.Controllers
     {
 
         // POST: api/Courts
-        [HttpPost]
-        [Route("api/reservationByDate")]
+        [HttpPost ("api/reservationByDate")]
         public List<Pistas> CourtsAvailable(Reservas reservas)
         {
             ReservationBusiness reservationbusiness = new ReservationBusiness();
@@ -35,10 +34,19 @@ namespace PruebaNitnetsIgnacio.Controllers
         [HttpPut]
         public IActionResult InsertNewCourt(Pistas court)
         {
+           Deportes kindSportExist = SportsDac.getOneSports(court.KindSport);
             try
             {
-                CourtsDac.InsertNewCourt(court);
-                return Ok();
+                if (kindSportExist != null)
+                {
+                    CourtsDac.InsertNewCourt(court);
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest();
+                }
+                
             }
             catch (Exception ex)
             {
@@ -56,7 +64,7 @@ namespace PruebaNitnetsIgnacio.Controllers
             Pistas courtExist = CourtsDac.GetCourt(court.IdCourt);
             List <Reservas> reservationList ;
             reservationList = ReservationDac.GetAllReservationsCourts(court.IdCourt);
-            if (courtExist == null && reservationList == null)
+            if (courtExist != null && (reservationList == null ||reservationList.Count == 0))
             {
                 CourtsDac.DeleteCourt(court);
                 return Ok();
@@ -74,7 +82,7 @@ namespace PruebaNitnetsIgnacio.Controllers
             Pistas courtExist = CourtsDac.GetCourt(court.IdCourt);
             List<Reservas> reservationList ;
             reservationList = ReservationDac.GetAllReservationsCourts(court.IdCourt);
-            if (courtExist == null && reservationList == null)
+            if (courtExist != null &&  (reservationList == null ||reservationList.Count == 0))
             {
                 CourtsDac.UpdateCourt(court);
                 return Ok();
@@ -85,8 +93,6 @@ namespace PruebaNitnetsIgnacio.Controllers
             }
 
         }
-
-
 
         private bool VerifyJson(Reservas reservas)
         {
