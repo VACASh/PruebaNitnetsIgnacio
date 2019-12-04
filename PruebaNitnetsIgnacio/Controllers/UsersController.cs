@@ -22,11 +22,10 @@ namespace PruebaNitnetsIgnacio.Controllers
             this.configuration = configuration;
         }
 
- 
         [HttpGet]
-        public Usuarios Get(Usuarios usuario)
+        public List <Usuarios> Get()
         {
-            return UserDac.ReadUser(usuario);
+            return UserDac.GetAllUsers();
         }
 
         [HttpDelete]
@@ -50,7 +49,7 @@ namespace PruebaNitnetsIgnacio.Controllers
             }
             else
             {
-                return Unauthorized();
+                return BadRequest();
             }
         }
 

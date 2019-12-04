@@ -57,6 +57,26 @@ namespace PruebaNitnetsIgnacio.Dac
 
         }
 
+        internal static List <Usuarios> GetAllUsers()
+        {
+            List<Usuarios> userLogin = new List<Usuarios>();
+            try
+            {
+                using (DataBaseSportClubContext dbSportContext = new DataBaseSportClubContext())
+                {
+                    userLogin = dbSportContext.Usuarios.ToList();
+                }
+
+                return userLogin;
+            }
+            catch (DbException ex)
+            {
+                //capturar excepcion y guardar en bdd el usuario y el porque de la excepción 
+                return null;
+            }
+
+        }
+
         internal static bool UpdateUser(Usuarios user)
         {
             Usuarios userLogin = new Usuarios();
@@ -65,13 +85,21 @@ namespace PruebaNitnetsIgnacio.Dac
                 using (DataBaseSportClubContext dbSportContext = new DataBaseSportClubContext())
                 {
                     userLogin = dbSportContext.Usuarios.Find(user.Login);
-                    userLogin.Dni = user.Dni != null ? user.Dni : userLogin.Dni;
-                    userLogin.Email = user.Email != null ? user.Email : userLogin.Email;
-                    userLogin.Name = user.Name != null ? user.Name : userLogin.Name;
-                    userLogin.Password = user.Password != null ? user.Password : userLogin.Password;
+                    if (userLogin != null)
+                    {
+                        userLogin.Dni = user.Dni != null ? user.Dni : userLogin.Dni;
+                        userLogin.Email = user.Email != null ? user.Email : userLogin.Email;
+                        userLogin.Name = user.Name != null ? user.Name : userLogin.Name;
+                        userLogin.Password = user.Password != null ? user.Password : userLogin.Password;
 
 
-                    return dbSportContext.SaveChanges() > 0 ? true : false;
+                        return dbSportContext.SaveChanges() > 0 ? true : false;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                   
 
                 }
             }
@@ -90,7 +118,8 @@ namespace PruebaNitnetsIgnacio.Dac
             {
                 using (DataBaseSportClubContext dbSportContext = new DataBaseSportClubContext())
                 {
-                    dbSportContext.Remove(user.Login);
+                    userLogin = dbSportContext.Usuarios.Find(user.Login);
+                    dbSportContext.Remove(userLogin);
 
                     return dbSportContext.SaveChanges() > 0 ? true : false;
                 }

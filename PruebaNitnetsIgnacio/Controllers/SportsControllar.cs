@@ -22,9 +22,9 @@ namespace PruebaNitnetsIgnacio.Controllers
             this.configuration = configuration;
         }
 
-        // POST: api/Users
+        
         [HttpPost]
-        public IActionResult CreateUser(Deportes sports)
+        public IActionResult NewSport(Deportes sports)
         {
             if (SportsDac.insertNewSports(sports))
             {
@@ -32,11 +32,11 @@ namespace PruebaNitnetsIgnacio.Controllers
             }
             else
             {
-                return Unauthorized();
+                return BadRequest();
             }
         }
         [HttpGet]
-        public List<Deportes> Get(Deportes sports)
+        public List<Deportes> GetAllSports()
         {
             return SportsDac.getAllSports();
         }
@@ -49,9 +49,9 @@ namespace PruebaNitnetsIgnacio.Controllers
         }
 
         [HttpDelete]
-        public IActionResult Delete(string sport)
+        public IActionResult Delete(Deportes sport)
         {
-            if (SportsDac.DeleteSport(sport))
+            if (SportsDac.DeleteSport(sport.KindSport))
             {
                 return Ok();
             }

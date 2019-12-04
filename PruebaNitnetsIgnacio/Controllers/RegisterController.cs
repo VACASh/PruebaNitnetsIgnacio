@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using PruebaNitnetsIgnacio.Dac;
 using PruebaNitnetsIgnacio.Models;
 
@@ -14,7 +15,12 @@ namespace PruebaNitnetsIgnacio.Controllers
     [ApiController]
     public class RegisterController : ControllerBase
     {
+        private readonly IConfiguration configuration;
 
+        public RegisterController(IConfiguration configuration)
+        {
+            this.configuration = configuration;
+        }
 
         // POST: api/Register
         [HttpPost]

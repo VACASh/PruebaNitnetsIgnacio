@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using PruebaNitnetsIgnacio.Dac;
 using PruebaNitnetsIgnacio.Models;
 
@@ -13,6 +14,12 @@ namespace PruebaNitnetsIgnacio.Controllers
     [ApiController]
     public class MembersController : ControllerBase
     {
+        private readonly IConfiguration configuration;
+
+        public MembersController(IConfiguration configuration)
+        {
+            this.configuration = configuration;
+        }
         // GET: api/Members
         [HttpGet]
         public List <Socios> GetMembers ()

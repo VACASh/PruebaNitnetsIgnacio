@@ -32,17 +32,18 @@ namespace PruebaNitnetsIgnacio.Dac
         }
         internal static bool DeleteSport(string kindSport)
         {
-            Usuarios userLogin = new Usuarios();
+            Deportes sportToDelete = new Deportes();
             try
             {
                 using (DataBaseSportClubContext dbSportContext = new DataBaseSportClubContext())
                 {
-                    dbSportContext.Remove(kindSport);
+                    sportToDelete = dbSportContext.Deportes.Find(kindSport);
+                    dbSportContext.Remove(sportToDelete);
 
                     return dbSportContext.SaveChanges() > 0 ? true : false;
                 }
             }
-            catch (DbException ex)
+            catch (Exception ex)
             {
                 //capturar excepcion y guardar en bdd el usuario y el porque de la excepción 
                 return false;
@@ -54,23 +55,41 @@ namespace PruebaNitnetsIgnacio.Dac
         {
             Deportes sport = new Deportes();
 
-            using (DataBaseSportClubContext dataBaseSportClub = new DataBaseSportClubContext())
+            try
             {
-                sport = dataBaseSportClub.Deportes.Find(updateSport.KindSport);
-                sport = updateSport;
-                return dataBaseSportClub.SaveChanges() > 0 ? true : false;
+                using (DataBaseSportClubContext dataBaseSportClub = new DataBaseSportClubContext())
+                {
+                    sport = dataBaseSportClub.Deportes.Find(updateSport.KindSport);
+                    sport.DescSport = updateSport.DescSport;
+                    return dataBaseSportClub.SaveChanges() > 0 ? true : false;
+                }
             }
+            catch (Exception)
+            {
+
+                return false;
+            }
+            
         }
 
         internal static bool insertNewSports(Deportes newSport)
         {
             Deportes sport = new Deportes();
 
-            using (DataBaseSportClubContext dataBaseSportClub = new DataBaseSportClubContext())
+            try
             {
-                dataBaseSportClub.Deportes.Add(newSport);
-                return dataBaseSportClub.SaveChanges() > 0 ? true : false;
+                using (DataBaseSportClubContext dataBaseSportClub = new DataBaseSportClubContext())
+                {
+                    dataBaseSportClub.Deportes.Add(newSport);
+                    return dataBaseSportClub.SaveChanges() > 0 ? true : false;
+                }
             }
+            catch (Exception ex )
+            {
+
+                return false;
+            }
+           
         }
     }
    

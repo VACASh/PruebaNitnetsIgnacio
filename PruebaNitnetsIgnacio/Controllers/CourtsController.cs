@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using PruebaNitnetsIgnacio.Business;
 using PruebaNitnetsIgnacio.Dac;
 using PruebaNitnetsIgnacio.Models;
@@ -15,6 +16,13 @@ namespace PruebaNitnetsIgnacio.Controllers
     [ApiController]
     public class CourtsController : ControllerBase
     {
+
+        private readonly IConfiguration configuration;
+
+        public CourtsController(IConfiguration configuration)
+        {
+            this.configuration = configuration;
+        }
 
         // POST: api/Courts
         [HttpPost ("api/reservationByDate")]

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using PruebaNitnetsIgnacio.Business;
 using PruebaNitnetsIgnacio.Dac;
 using PruebaNitnetsIgnacio.Models;
@@ -14,7 +15,12 @@ namespace PruebaNitnetsIgnacio.Controllers
     [ApiController]
     public class ReservationCourtsController : ControllerBase
     {
+        private readonly IConfiguration configuration;
 
+        public ReservationCourtsController(IConfiguration configuration)
+        {
+            this.configuration = configuration;
+        }
 
         // Get: api/ReservationCourts
         [HttpGet]
@@ -45,26 +51,42 @@ namespace PruebaNitnetsIgnacio.Controllers
             List<Pistas> availableCourts = new List<Pistas>();
             availableCourts = reservationBusiness.CourtsAvailable(reservas);
             Pistas court = CourtsDac.GetCourt(reservas.IdCourt);
+            bool isAvilableCourt = false;
 
-            if (availableCourts != null && availableCourts.Contains(court))
+            foreach (Pistas courtsToReserve in availableCourts)
+            {
+                if (court.IdCourt == courtsToReserve.IdCourt)
+                {
+                    isAvilableCourt = true;
+                    break;
+                }
+                
+            }
+
+            if (availableCourts != null && isAvilableCourt)
             {
                 ReservationDac.ReserveCourt(reservas);
                 return Ok();
             }
             else
             {
-                return BadRequest();
+                return Unauthorized();
             }
         }
 
         [HttpDelete]
-        public void DeleteReservation(int idReservation)
+        public IActionResult DeleteReservation(Reservas reservation)
         {
 
-            Reservas reservation = ReservationDac.GetReservation(idReservation);
-            if (reservation != null)
+            Reservas reservationToDelete = ReservationDac.GetReservation(reservation.IdReservation);
+            if (reservationToDelete != null && reservationToDelete.DateReservation.Date > DateTime.Now.Date)
             {
-                ReservationDac.DeleteReservation(idReservation);
+                ReservationDac.DeleteReservation(reservation.IdReservation);
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
             }
         }
 
