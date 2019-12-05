@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using PruebaNitnetsIgnacio.Dac;
@@ -15,11 +10,9 @@ namespace PruebaNitnetsIgnacio.Controllers
     [ApiController]
     public class RegisterController : ControllerBase
     {
-        private readonly IConfiguration configuration;
-
-        public RegisterController(IConfiguration configuration)
+        
+        public RegisterController()
         {
-            this.configuration = configuration;
         }
 
         // POST: api/Register
@@ -31,10 +24,10 @@ namespace PruebaNitnetsIgnacio.Controllers
             bool isEmailRegisted;
             bool isDniRegisted;
             bool isCorrectJson;
-            Usuarios userRegisteered = new Usuarios();
-            isCorrectJson = verifyJson(userToRegister);
+            Usuarios userRegisteered;
+            isCorrectJson = VerifyJson(userToRegister);
 
-            isUserRegisted = registerUserLogin(userToRegister.Login);
+            isUserRegisted = RegisterUserLogin(userToRegister.Login);
 
             if (!isCorrectJson)
             {
@@ -48,14 +41,14 @@ namespace PruebaNitnetsIgnacio.Controllers
                 }
                 else
                 {
-                    isDniRegisted = registerUserDni(userToRegister.Dni);
+                    isDniRegisted = RegisterUserDni(userToRegister.Dni);
                     if (isDniRegisted)
                     {
                         return Unauthorized();
                     }
                     else
                     {
-                        isEmailRegisted = registerUserEmail(userToRegister.Email);
+                        isEmailRegisted = RegisterUserEmail(userToRegister.Email);
 
                         if (isEmailRegisted)
                         {
@@ -82,7 +75,7 @@ namespace PruebaNitnetsIgnacio.Controllers
 
         }
 
-        private bool verifyJson(Usuarios userToRegister)
+        private bool VerifyJson(Usuarios userToRegister)
         {
             return !string.IsNullOrEmpty(userToRegister.Dni) 
                 && !string.IsNullOrEmpty(userToRegister.Email) 
@@ -91,22 +84,22 @@ namespace PruebaNitnetsIgnacio.Controllers
                 && !string.IsNullOrEmpty(userToRegister.Name);
         }
 
-        private bool registerUserLogin(string login)
+        private bool RegisterUserLogin(string login)
         {
-            bool isUserRegistred = UserDac.existUserLogin(login);
+            bool isUserRegistred = UserDac.ExistUserLogin(login);
 
             return isUserRegistred;
         }
 
-        private bool registerUserEmail(string email)
+        private bool RegisterUserEmail(string email)
         {
-            bool isUserRegistred = UserDac.existUserEmail(email);
+            bool isUserRegistred = UserDac.ExistUserEmail(email);
 
             return isUserRegistred;
         }
-        private bool registerUserDni(string dni)
+        private bool RegisterUserDni(string dni)
         {
-            bool isUserRegistred = UserDac.existUserDni(dni);
+            bool isUserRegistred = UserDac.ExistUserDni(dni);
 
             return isUserRegistred;
         }

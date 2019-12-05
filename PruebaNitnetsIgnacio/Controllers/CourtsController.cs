@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
+using PagedList;
 using PruebaNitnetsIgnacio.Business;
 using PruebaNitnetsIgnacio.Dac;
 using PruebaNitnetsIgnacio.Models;
@@ -16,16 +13,13 @@ namespace PruebaNitnetsIgnacio.Controllers
     [ApiController]
     public class CourtsController : ControllerBase
     {
-
-        private readonly IConfiguration configuration;
-
-        public CourtsController(IConfiguration configuration)
-        {
-            this.configuration = configuration;
-        }
-
-        // POST: api/Courts
-        [HttpPost ("api/reservationByDate")]
+        /// <summary>
+        /// Pistas permitidas para su reserva
+        /// </summary>
+        /// <param name="reservas">Reserva</param>
+        /// <returns>Listado de pistas que se pueden reservar</returns>
+        // POST: api/reservationByDate
+        [HttpPost("api/reservationByDate")]
         public List<Pistas> CourtsAvailable(Reservas reservas)
         {
             ReservationBusiness reservationbusiness = new ReservationBusiness();
@@ -33,64 +27,90 @@ namespace PruebaNitnetsIgnacio.Controllers
             return reservationbusiness.CourtsAvailable(reservas);
         }
 
-        [HttpGet]
-        public List<Pistas> GetCourts()
+        /// <summary>
+        /// Pistas en base de datos
+        /// </summary>
+        /// <param name="numberPage">numberPage</param>
+        /// <returns>Listado de pistas paginado</returns>
+        [HttpGet("{numberPage}")]
+        public IActionResult GetCourts(int numberPage)
         {
-            return CourtsDac.GetCourts();
+            if (CourtsDac.GetCourts(numberPage).TotalItemCount > numberPage)
+                return Ok(CourtsDac.GetCourts(numberPage));
+            else
+                return BadRequest();
         }
 
+        /// <summary>
+        /// Insertado de nueva pista
+        /// </summary>
+        /// <param name="court">Pista</param>
+        /// <returns>evento</returns>
         [HttpPut]
         public IActionResult InsertNewCourt(Pistas court)
         {
-           Deportes kindSportExist = SportsDac.getOneSports(court.KindSport);
-            try
+            if (VerifyJson(court))
             {
-                if (kindSportExist != null)
+                Deportes kindSportExist = SportsDac.getOneSports(court.KindSport);
+                try
                 {
-                    CourtsDac.InsertNewCourt(court);
-                    return Ok();
-                }
-                else
-                {
-                    return BadRequest();
-                }
-                
-            }
-            catch (Exception ex)
-            {
+                    if (kindSportExist != null)
+                    {
+                        CourtsDac.InsertNewCourt(court);
+                        return Ok();
+                    }
+                    else
+                    {
+                        return BadRequest();
+                    }
 
+                }
+                catch (Exception ex)
+                {
+
+                    return Conflict();
+                }
+            }
+            else
+            {
                 return Conflict();
             }
-
-
-
         }
 
+        /// <summary>
+        /// Borrado de pistas en base de datos
+        /// </summary>
+        /// <param name="court">Pista</param>
+        /// <returns>Evento</returns>
         [HttpDelete]
         public IActionResult DeleteCourt(Pistas court)
         {
             Pistas courtExist = CourtsDac.GetCourt(court.IdCourt);
-            List <Reservas> reservationList ;
+            List<Reservas> reservationList;
             reservationList = ReservationDac.GetAllReservationsCourts(court.IdCourt);
-            if (courtExist != null && (reservationList == null ||reservationList.Count == 0))
+            if (courtExist != null && (reservationList == null || reservationList.Count == 0))
             {
                 CourtsDac.DeleteCourt(court);
                 return Ok();
             }
             else
             {
-                return  BadRequest();
+                return BadRequest();
             }
 
         }
-
+        /// <summary>
+        /// Actulización de pistas en base de datos
+        /// </summary>
+        /// <param name="court">Pista</param>
+        /// <returns>Evento</returns>
         [HttpPost]
         public IActionResult UpdateCourt(Pistas court)
         {
             Pistas courtExist = CourtsDac.GetCourt(court.IdCourt);
-            List<Reservas> reservationList ;
+            List<Reservas> reservationList;
             reservationList = ReservationDac.GetAllReservationsCourts(court.IdCourt);
-            if (courtExist != null &&  (reservationList == null ||reservationList.Count == 0))
+            if (courtExist != null && (reservationList == null || reservationList.Count == 0))
             {
                 CourtsDac.UpdateCourt(court);
                 return Ok();
@@ -102,16 +122,10 @@ namespace PruebaNitnetsIgnacio.Controllers
 
         }
 
-        private bool VerifyJson(Reservas reservas)
+        private bool VerifyJson(Pistas courtToVerify)
         {
-            if (!string.IsNullOrEmpty(reservas.KindSport) && reservas.IdMember != 0 && reservas.DateReservation != null)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return (!string.IsNullOrEmpty(courtToVerify.KindSport)
+                && courtToVerify.IdCourt != 0) ? true : false;
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using PagedList;
 using PruebaNitnetsIgnacio.Dac;
 using PruebaNitnetsIgnacio.Models;
 
@@ -22,10 +23,14 @@ namespace PruebaNitnetsIgnacio.Controllers
             this.configuration = configuration;
         }
 
-        [HttpGet]
-        public List <Usuarios> Get()
+        [HttpGet("{numberPage}")]
+
+        public IActionResult GetAllUsers(int numberPage)
         {
-            return UserDac.GetAllUsers();
+            if (UserDac.GetAllUsers(numberPage).TotalItemCount > numberPage)
+                return Ok(UserDac.GetAllUsers(numberPage));
+            else
+                return BadRequest();
         }
 
         [HttpDelete]

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using PagedList;
 using PruebaNitnetsIgnacio.Dac;
 using PruebaNitnetsIgnacio.Models;
 
@@ -15,18 +16,14 @@ namespace PruebaNitnetsIgnacio.Controllers
     [ApiController]
     public class SportsController : ControllerBase
     {
-        private readonly IConfiguration configuration;
-
-        public SportsController(IConfiguration configuration)
-        {
-            this.configuration = configuration;
-        }
+        public SportsController()
+        {}
 
         
         [HttpPost]
         public IActionResult NewSport(Deportes sports)
         {
-            if (SportsDac.insertNewSports(sports))
+            if (SportsDac.InsertNewSports(sports))
             {
                 return Ok();
             }
@@ -35,11 +32,17 @@ namespace PruebaNitnetsIgnacio.Controllers
                 return BadRequest();
             }
         }
-        [HttpGet]
-        public List<Deportes> GetAllSports()
+
+        [HttpGet("{numberPage}")]
+
+        public IActionResult GetAllSports(int numberPage)
         {
-            return SportsDac.getAllSports();
+            if (SportsDac.GetAllSports(numberPage).TotalItemCount > numberPage)
+                return Ok(SportsDac.GetAllSports(numberPage));
+            else
+                return BadRequest();
         }
+
 
         [HttpGet]
         [Route("api/sports/{id}")]

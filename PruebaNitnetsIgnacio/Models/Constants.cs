@@ -9,5 +9,7 @@ namespace PruebaNitnetsIgnacio.Models
     {
         public const int MINHOUR = 8;
         public const int MAXHOUR = 21;
+
+        public const int NITEMSPERPAGE = 2;
     }
 }

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ProjectInfo xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.sonarsource.com/msbuild/integration/2015/1">
+  <ProjectName>PruebaNitnetsIgnacio</ProjectName>
+  <ProjectLanguage>C#</ProjectLanguage>
+  <ProjectType>Product</ProjectType>
+  <ProjectGuid>b338c202-90ec-47a0-94a9-ef831e663064</ProjectGuid>
+  <FullPath>C:\Users\ialberol\Desktop\NV\2.0\PruebaNitnetsIgnacio\3.0\4.0\PruebaNitnetsIgnacio\PruebaNitnetsIgnacio\PruebaNitnetsIgnacio.csproj</FullPath>
+  <IsExcluded>false</IsExcluded>
+  <AnalysisResults>
+    <AnalysisResult Id="FilesToAnalyze" Location="C:\Users\ialberol\Desktop\NV\2.0\PruebaNitnetsIgnacio\3.0\4.0\PruebaNitnetsIgnacio\.sonarqube\out\0\FilesToAnalyze.txt" />
+  </AnalysisResults>
+  <AnalysisSettings>
+    <Property Name="sonar.cs.roslyn.reportFilePath">C:\Users\ialberol\Desktop\NV\2.0\PruebaNitnetsIgnacio\3.0\4.0\PruebaNitnetsIgnacio\PruebaNitnetsIgnacio\bin\Debug\netcoreapp3.0\PruebaNitnetsIgnacio.dll.RoslynCA.json</Property>
+    <Property Name="sonar.cs.analyzer.projectOutPath">C:\Users\ialberol\Desktop\NV\2.0\PruebaNitnetsIgnacio\3.0\4.0\PruebaNitnetsIgnacio\.sonarqube\out\0</Property>
+  </AnalysisSettings>
+  <Configuration>Debug</Configuration>
+  <Platform>AnyCPU</Platform>
+  <TargetFramework>netcoreapp3.0</TargetFramework>
+</ProjectInfo>

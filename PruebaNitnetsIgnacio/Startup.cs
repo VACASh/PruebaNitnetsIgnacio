@@ -31,7 +31,8 @@ namespace PruebaNitnetsIgnacio
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-           // CONFIGURACIÓN DEL SERVICIO DE AUTENTICACIÓN JWT
+            services.AddOpenApiDocument();
+            // CONFIGURACIÓN DEL SERVICIO DE AUTENTICACIÓN JWT
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
@@ -76,6 +77,9 @@ namespace PruebaNitnetsIgnacio
             {
                 endpoints.MapControllers();
             });
+
+            app.UseOpenApi();
+            app.UseSwaggerUi3();
         }
     }
 }

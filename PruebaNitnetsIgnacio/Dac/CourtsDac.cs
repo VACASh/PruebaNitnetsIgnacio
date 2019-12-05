@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using PruebaNitnetsIgnacio.Models;
+using PagedList;
 
 namespace PruebaNitnetsIgnacio.Dac
 {
@@ -21,6 +22,35 @@ namespace PruebaNitnetsIgnacio.Dac
             }
         }
 
+        internal static List<Pistas> getAllCourtsWhitoutReservation(Reservas reservation)
+        {
+            List<Pistas> allCourtsByKindSport = new List<Pistas>();
+
+
+
+            using (DataBaseSportClubContext dataBaseSportClub = new DataBaseSportClubContext())
+            {
+
+                
+                //Todas las pistas
+                allCourtsByKindSport = dataBaseSportClub.Pistas.Where(p => p.KindSport == reservation.KindSport).ToList();
+                List<Reservas> sportsWhitoutReservation = new List<Reservas>();
+
+                //Pistas con reserva
+                sportsWhitoutReservation =  
+                    dataBaseSportClub.Reservas.Where(r => 
+                r.DateReservation == reservation.DateReservation 
+                && r.KindSport == reservation.KindSport).ToList();
+
+                foreach (Reservas courtForRemove in sportsWhitoutReservation)
+                {
+                    allCourtsByKindSport.RemoveAll(s => s.IdCourt == courtForRemove.IdCourt);
+                }
+                return allCourtsByKindSport;
+                   
+            }
+        }
+
         internal static Pistas GetCourt(int idCourt)
         {
             using (DataBaseSportClubContext dataBaseSportClub = new DataBaseSportClubContext())
@@ -29,11 +59,11 @@ namespace PruebaNitnetsIgnacio.Dac
             }
         }
 
-        internal static List<Pistas> GetCourts()
+        internal static IPagedList<Pistas> GetCourts(int pagina)
         {
             using (DataBaseSportClubContext dataBaseSportClub = new DataBaseSportClubContext())
             {
-                return dataBaseSportClub.Pistas.ToList();
+                return dataBaseSportClub.Pistas.ToPagedList(pagina, Constants.NITEMSPERPAGE);
             }
         }
 
