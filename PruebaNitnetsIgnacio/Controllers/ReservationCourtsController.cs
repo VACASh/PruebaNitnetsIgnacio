@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PruebaNitnetsIgnacio.Business;
 using PruebaNitnetsIgnacio.Dac;
@@ -9,6 +10,7 @@ namespace PruebaNitnetsIgnacio.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ReservationCourtsController : ControllerBase
     {
        
@@ -45,20 +47,30 @@ namespace PruebaNitnetsIgnacio.Controllers
             Pistas court = CourtsDac.GetCourt(reservas.IdCourt);
             bool isAvilableCourt = false;
 
-            foreach (Pistas courtsToReserve in availableCourts)
+            if (availableCourts != null && availableCourts.Count > 0)
             {
-                if (court.IdCourt == courtsToReserve.IdCourt)
+                foreach (Pistas courtsToReserve in availableCourts)
                 {
-                    isAvilableCourt = true;
-                    break;
+                    if (court.IdCourt == courtsToReserve.IdCourt)
+                    {
+                        isAvilableCourt = true;
+                        break;
+                    }
+
                 }
-
             }
-
-            if (availableCourts != null && isAvilableCourt)
+            if ( isAvilableCourt)
             {
-                ReservationDac.ReserveCourt(reservas);
-                return Ok();
+                if (ReservationDac.ReserveCourt(reservas))
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest();
+                }
+               
+                
             }
             else
             {

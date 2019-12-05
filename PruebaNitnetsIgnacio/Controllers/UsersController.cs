@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -14,6 +15,7 @@ namespace PruebaNitnetsIgnacio.Controllers
     
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UsersController : ControllerBase
     {
         private readonly IConfiguration configuration;
@@ -46,7 +48,7 @@ namespace PruebaNitnetsIgnacio.Controllers
             }
         }
         [HttpPut]
-        public IActionResult Put(Usuarios usuario)
+        public IActionResult UpdateUser(Usuarios usuario)
         {
             if( UserDac.UpdateUser(usuario))
             {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PagedList;
 using PruebaNitnetsIgnacio.Business;
@@ -11,6 +12,7 @@ namespace PruebaNitnetsIgnacio.Controllers
 
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CourtsController : ControllerBase
     {
         /// <summary>
@@ -124,8 +126,7 @@ namespace PruebaNitnetsIgnacio.Controllers
 
         private bool VerifyJson(Pistas courtToVerify)
         {
-            return (!string.IsNullOrEmpty(courtToVerify.KindSport)
-                && courtToVerify.IdCourt != 0) ? true : false;
+            return (!string.IsNullOrEmpty(courtToVerify.KindSport)) ? true : false;
         }
     }
 }
