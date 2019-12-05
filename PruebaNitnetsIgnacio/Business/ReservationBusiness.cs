@@ -13,7 +13,7 @@ namespace PruebaNitnetsIgnacio.Business
                 && reservation.DateReservation.TimeOfDay.TotalHours <= Constants.MAXHOUR)
             {
                 //Comprueba si ha realizado mas de dos reservas
-                if (ReservationDac.NumberOfReservations(reservation.IdMember) < 3)
+                if (ReservationDac.NumberOfReservations(reservation) < 3)
                 {
                     if (!ReservationDac.HaveMemberOtherReservationSameHour(reservation.IdMember, reservation.DateReservation))
                     {

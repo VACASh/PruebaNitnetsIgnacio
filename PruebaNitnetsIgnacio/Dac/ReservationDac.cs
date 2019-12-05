@@ -34,32 +34,20 @@ namespace PruebaNitnetsIgnacio.Dac
             }
         }
 
-        internal static List<Reservas> listCourtsByMember(int idMember, DateTime dateReservation)
+        internal static int NumberOfReservations(Reservas reservation)
         {
             List<Reservas> courtsReserverdByMember = new List<Reservas>();
 
             using (DataBaseSportClubContext dataBaseSportClub = new DataBaseSportClubContext())
             {
                 courtsReserverdByMember = dataBaseSportClub.Reservas
-                    .Where(r => r.IdMember == idMember && r.DateReservation.Date == dateReservation.Date)
-                    .ToList();
-                return courtsReserverdByMember;
-            }
-        }
-
-
-        internal static int NumberOfReservations(int idMember)
-        {
-            List<Reservas> courtsReserverdByMember = new List<Reservas>();
-
-            using (DataBaseSportClubContext dataBaseSportClub = new DataBaseSportClubContext())
-            {
-                courtsReserverdByMember = dataBaseSportClub.Reservas
-                    .Where(r => r.IdMember == idMember)
+                    .Where(r => r.IdMember == reservation.IdMember && r.DateReservation.Date == reservation.DateReservation.Date)
                     .ToList();
                 return courtsReserverdByMember.Count;
             }
         }
+
+
 
         internal static bool HaveMemberOtherReservationSameHour(int idMember, DateTime dateReservation)
         {

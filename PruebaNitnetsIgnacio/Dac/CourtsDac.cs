@@ -51,40 +51,6 @@ namespace PruebaNitnetsIgnacio.Dac
             }
         }
 
-        //internal static List<TableJoinResultCourtAndSports> getAllCourtsWhitoutReservation(string kindSport)
-        //{
-        //    List<Pistas> allCourtsByKindSport = new List<Pistas>();
-
-            
-
-        //    using (DataBaseSportClubContext dataBaseSportClub = new DataBaseSportClubContext())
-        //    {
-        //        List<TableJoinResultCourtAndSports> table =
-        //        from allCourtsFromSport in dataBaseSportClub.Pistas
-        //        let reservas = from allReservationsFromCourts in dataBaseSportClub.Reservas.DefaultIfEmpty()
-        //                     select allReservationsFromCourts.IdCourt
-        //        where catIds.Contains(p.CategoryID) == true
-        //        select new { Product = p.Name, CategoryID = p.CategoryID };
-
-
-        //        List< TableJoinResultCourtAndSports> table = 
-        //         (from allCourtsFromSport in dataBaseSportClub.Pistas
-        //                join allReservationsFromCourts in dataBaseSportClub.Reservas.DefaultIfEmpty()
-        //                on allCourtsFromSport.IdCourt equals allReservationsFromCourts.IdCourt 
-        //                where allCourtsFromSport.KindSport.Equals(kindSport) 
-        //                select new TableJoinResultCourtAndSports { Pistas = allCourtsFromSport }).ToList();
-
-        //        return table;
-        //        //allCourtsByKindSport = 
-
-
-        //        //allCourtsByKindSport = dataBaseSportClub.Pistas
-        //        //    .Where(r => r.KindSport == kindSport)
-        //        //    .ToList();
-        //        //return allCourtsByKindSport;
-        //    }
-        //}
-
         internal static Pistas GetCourt(int idCourt)
         {
             using (DataBaseSportClubContext dataBaseSportClub = new DataBaseSportClubContext())
