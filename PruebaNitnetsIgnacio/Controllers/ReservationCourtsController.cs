@@ -61,8 +61,16 @@ namespace PruebaNitnetsIgnacio.Controllers
             }
             if ( isAvilableCourt)
             {
-                ReservationDac.ReserveCourt(reservas);
-                return Ok();
+                if (ReservationDac.ReserveCourt(reservas))
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest();
+                }
+               
+                
             }
             else
             {

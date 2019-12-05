@@ -124,8 +124,7 @@ namespace PruebaNitnetsIgnacio.Controllers
 
         private bool VerifyJson(Pistas courtToVerify)
         {
-            return (!string.IsNullOrEmpty(courtToVerify.KindSport)
-                && courtToVerify.IdCourt != 0) ? true : false;
+            return (!string.IsNullOrEmpty(courtToVerify.KindSport)) ? true : false;
         }
     }
 }
