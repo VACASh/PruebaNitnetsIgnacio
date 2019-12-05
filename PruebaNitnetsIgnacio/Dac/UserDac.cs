@@ -1,4 +1,5 @@
-﻿using PruebaNitnetsIgnacio.Models;
+﻿using PagedList;
+using PruebaNitnetsIgnacio.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
@@ -9,8 +10,6 @@ namespace PruebaNitnetsIgnacio.Dac
 {
     public class UserDac
     {
-
-
 
         //CRUD
         internal static Usuarios CreateUser(Usuarios userToRegister)
@@ -57,17 +56,16 @@ namespace PruebaNitnetsIgnacio.Dac
 
         }
 
-        internal static List <Usuarios> GetAllUsers()
+        internal static IPagedList<Usuarios> GetAllUsers(int pagina)
         {
-            List<Usuarios> userLogin = new List<Usuarios>();
             try
             {
                 using (DataBaseSportClubContext dbSportContext = new DataBaseSportClubContext())
                 {
-                    userLogin = dbSportContext.Usuarios.ToList();
+                    return dbSportContext.Usuarios.ToPagedList(pagina,
+                                                              Constants.NITEMSPERPAGE);
                 }
 
-                return userLogin;
             }
             catch (DbException ex)
             {
@@ -134,7 +132,7 @@ namespace PruebaNitnetsIgnacio.Dac
 
 
         //Extras
-        internal static bool existUserLogin(string login)
+        internal static bool ExistUserLogin(string login)
         {
             Usuarios user = new Usuarios();
             using (DataBaseSportClubContext dbSportContext = new DataBaseSportClubContext())
@@ -152,7 +150,7 @@ namespace PruebaNitnetsIgnacio.Dac
             }
         }
 
-        internal static bool existUserEmail(string email)
+        internal static bool ExistUserEmail(string email)
         {
             Usuarios user = new Usuarios();
             using (DataBaseSportClubContext dbSportContext = new DataBaseSportClubContext())
@@ -172,7 +170,7 @@ namespace PruebaNitnetsIgnacio.Dac
 
 
 
-        internal static bool existUserDni(string dni)
+        internal static bool ExistUserDni(string dni)
         {
             Usuarios user = new Usuarios();
             using (DataBaseSportClubContext dbSportContext = new DataBaseSportClubContext())

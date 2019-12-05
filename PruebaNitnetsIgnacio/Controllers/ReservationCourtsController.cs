@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using PruebaNitnetsIgnacio.Business;
 using PruebaNitnetsIgnacio.Dac;
 using PruebaNitnetsIgnacio.Models;
@@ -15,11 +11,9 @@ namespace PruebaNitnetsIgnacio.Controllers
     [ApiController]
     public class ReservationCourtsController : ControllerBase
     {
-        private readonly IConfiguration configuration;
-
-        public ReservationCourtsController(IConfiguration configuration)
+       
+        public ReservationCourtsController()
         {
-            this.configuration = configuration;
         }
 
         // Get: api/ReservationCourts
@@ -28,21 +22,19 @@ namespace PruebaNitnetsIgnacio.Controllers
         {
             List<Reservas> reservationsDay = new List<Reservas>();
             DateTime dayReservations;
-            dayReservations = JasonDateIsCorrect(reservas.DateReservation);
+            dayReservations = JsonDateIsCorrect(reservas.DateReservation);
 
-            if (dayReservations != null)
-            {
-
+            try { 
                 reservationsDay = ReservationDac.GetReservationsDay(dayReservations);
 
                 return reservationsDay;
             }
-            else
+            catch (Exception e)
             {
                 return null;
+            
             }
-
-        }
+         }
 
         [HttpPost]
         public IActionResult ReservationCourt(Reservas reservas)
@@ -138,10 +130,7 @@ namespace PruebaNitnetsIgnacio.Controllers
 
         }
 
-
-
-
-        private DateTime JasonDateIsCorrect(DateTime dateTimeToReserve)
+        private DateTime JsonDateIsCorrect(DateTime dateTimeToReserve)
         {
             DateTime dayReservations = new DateTime();
             try
@@ -150,7 +139,7 @@ namespace PruebaNitnetsIgnacio.Controllers
             }
             catch (Exception)
             {
-
+                
             }
 
             return dayReservations;

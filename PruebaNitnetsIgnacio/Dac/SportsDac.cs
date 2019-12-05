@@ -3,20 +3,19 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
 using System.Threading.Tasks;
+using PagedList;
 using PruebaNitnetsIgnacio.Models;
 
 namespace PruebaNitnetsIgnacio.Dac
 {
     public class SportsDac
     {
-        internal static List<Deportes> getAllSports()
+        internal static IPagedList<Deportes> GetAllSports(int pagina)
         {
-            List<Deportes> allSports = new List<Deportes>();
-
             using (DataBaseSportClubContext dataBaseSportClub = new DataBaseSportClubContext())
             {
-                allSports = dataBaseSportClub.Deportes.ToList(); 
-                return allSports;
+                return dataBaseSportClub.Deportes.ToPagedList(pagina,
+                                                              Constants.NITEMSPERPAGE);
             }
         }
 
@@ -45,7 +44,6 @@ namespace PruebaNitnetsIgnacio.Dac
             }
             catch (Exception ex)
             {
-                //capturar excepcion y guardar en bdd el usuario y el porque de la excepción 
                 return false;
             }
 
@@ -69,10 +67,10 @@ namespace PruebaNitnetsIgnacio.Dac
 
                 return false;
             }
-            
+
         }
 
-        internal static bool insertNewSports(Deportes newSport)
+        internal static bool InsertNewSports(Deportes newSport)
         {
             Deportes sport = new Deportes();
 
@@ -84,13 +82,13 @@ namespace PruebaNitnetsIgnacio.Dac
                     return dataBaseSportClub.SaveChanges() > 0 ? true : false;
                 }
             }
-            catch (Exception ex )
+            catch (Exception ex)
             {
 
                 return false;
             }
-           
+
         }
     }
-   
+
 }

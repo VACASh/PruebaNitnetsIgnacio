@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using PagedList;
 using PruebaNitnetsIgnacio.Models;
 
 namespace PruebaNitnetsIgnacio.Dac
 {
     public class MembersDac
     {
-        internal static List<Socios> GetAllMembers()
+        internal static IPagedList<Socios> GetAllMembers(int pagina)
         {
-            List<Socios> allMembers = new List<Socios>();
+            IPagedList<Socios> allMembers;
 
             using (DataBaseSportClubContext dataBaseSportClub = new DataBaseSportClubContext())
             {
-                allMembers = dataBaseSportClub.Socios.ToList();
+                allMembers = dataBaseSportClub.Socios.ToPagedList(pagina, Constants.NITEMSPERPAGE);
                 return allMembers;
             }
         }

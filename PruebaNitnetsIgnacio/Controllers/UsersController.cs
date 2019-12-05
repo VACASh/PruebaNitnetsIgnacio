@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using PagedList;
 using PruebaNitnetsIgnacio.Dac;
 using PruebaNitnetsIgnacio.Models;
 
@@ -22,10 +23,11 @@ namespace PruebaNitnetsIgnacio.Controllers
             this.configuration = configuration;
         }
 
-        [HttpGet]
-        public List <Usuarios> Get()
+        [HttpGet("{numberPage}")]
+
+        public IPagedList<Usuarios> GetAllUsers(int numberPage)
         {
-            return UserDac.GetAllUsers();
+            return UserDac.GetAllUsers(numberPage);
         }
 
         [HttpDelete]

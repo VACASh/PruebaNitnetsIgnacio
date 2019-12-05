@@ -1,9 +1,6 @@
 ﻿using PruebaNitnetsIgnacio.Dac;
 using PruebaNitnetsIgnacio.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace PruebaNitnetsIgnacio.Business
 {
@@ -15,10 +12,7 @@ namespace PruebaNitnetsIgnacio.Business
             List<Reservas> courtsReservedByMember = new List<Reservas>();
             List<Reservas> courstReservedByDayAndHour = new List<Reservas>();
             List<Pistas> courtsKindSport = new List<Pistas>();
-            bool isCorrectJson = true; //verifyJson(reservation);
-
-            if (isCorrectJson)
-            {
+           
                 if (reservation.DateReservation.TimeOfDay.TotalHours >= Constants.MINHOUR
                     && reservation.DateReservation.TimeOfDay.TotalHours <= Constants.MAXHOUR)
                 {
@@ -26,8 +20,9 @@ namespace PruebaNitnetsIgnacio.Business
                     courstReservedByDayAndHour = ReservationDac.getReservationsDayAndHour(reservation);
                     courtsKindSport = CourtsDac.getAllCourtsKindSport(reservation.KindSport);
 
-                    //Elimina las pistas que estan reservadas para ese deporte por cualquier socio
-                    foreach (Reservas CourtsReserved in courstReservedByDayAndHour)
+               
+                //Elimina las pistas que estan reservadas para ese deporte por cualquier socio
+                foreach (Reservas CourtsReserved in courstReservedByDayAndHour)
                     {
                         courtsKindSport.RemoveAll(c => c.IdCourt == CourtsReserved.IdCourt);
                     }
@@ -47,7 +42,7 @@ namespace PruebaNitnetsIgnacio.Business
                         courtsAviable = courtsKindSport;
                     }
                 }
-            }
+            
             //Devuelve pistas disponibles en caso de haber alguna pista y devuelve null en caso de no haber disponible
             return courtsAviable;
         }

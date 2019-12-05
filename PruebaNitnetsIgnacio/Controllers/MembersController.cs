@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using PagedList;
 using PruebaNitnetsIgnacio.Dac;
 using PruebaNitnetsIgnacio.Models;
 
@@ -14,17 +11,13 @@ namespace PruebaNitnetsIgnacio.Controllers
     [ApiController]
     public class MembersController : ControllerBase
     {
-        private readonly IConfiguration configuration;
-
-        public MembersController(IConfiguration configuration)
-        {
-            this.configuration = configuration;
-        }
+        public MembersController()
+        {}
         // GET: api/Members
-        [HttpGet]
-        public List <Socios> GetMembers ()
+        [HttpGet("{numberPage}")]
+        public IPagedList<Socios> GetMembers( int numberPage)
         {
-            return MembersDac.GetAllMembers();
+            return MembersDac.GetAllMembers(numberPage);
         }
 
         // POST: api/Members
@@ -42,13 +35,13 @@ namespace PruebaNitnetsIgnacio.Controllers
             }
         }
 
-       
+
         [HttpPut()]
         public IActionResult UpdateMember(Socios member)
         {
             Socios memberExist = MembersDac.GetMember(member.IdMember);
-            
-            if (memberExist != null )
+
+            if (memberExist != null)
             {
                 MembersDac.UpdateMember(member);
                 return Ok();
@@ -64,8 +57,8 @@ namespace PruebaNitnetsIgnacio.Controllers
         public IActionResult DeleteMember(Socios member)
         {
             Socios memberExist = MembersDac.GetMember(member.IdMember);
-           List <Reservas> reservationsByMember = ReservationDac.GetReservationByMember(member.IdMember);
-            if (memberExist != null && (reservationsByMember.Count == 0 ||reservationsByMember == null))
+            List<Reservas> reservationsByMember = ReservationDac.GetReservationByMember(member.IdMember);
+            if (memberExist != null && (reservationsByMember.Count == 0 || reservationsByMember == null))
             {
                 CourtsDac.DeleteMember(member);
                 return Ok();
