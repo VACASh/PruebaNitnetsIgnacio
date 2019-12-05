@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -14,6 +15,7 @@ namespace PruebaNitnetsIgnacio.Controllers
     
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class SportsController : ControllerBase
     {
         private readonly IConfiguration configuration;
@@ -46,7 +48,7 @@ namespace PruebaNitnetsIgnacio.Controllers
 
 
         [HttpGet]
-        [Route("api/sports/{id}")]
+        [Route("ks/{kindSport}")]
         public Deportes Get(string kindSport)
         {
             return SportsDac.getOneSports(kindSport);
@@ -66,7 +68,7 @@ namespace PruebaNitnetsIgnacio.Controllers
         }
 
         [HttpPut]
-        public IActionResult Put(Deportes sport)
+        public IActionResult UpdateSport(Deportes sport)
         {
             if( SportsDac.UpdateSport(sport))
             {
