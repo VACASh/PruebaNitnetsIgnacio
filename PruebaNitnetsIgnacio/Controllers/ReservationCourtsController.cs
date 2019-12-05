@@ -151,7 +151,7 @@ namespace PruebaNitnetsIgnacio.Controllers
             }
             catch (Exception)
             {
-                
+                dayReservations = new DateTime();
             }
 
             return dayReservations;

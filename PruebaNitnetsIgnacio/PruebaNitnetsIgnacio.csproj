@@ -19,8 +19,4 @@
     <PackageReference Include="Spring.Core" Version="2.0.1" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Services\" />
-  </ItemGroup>
-
 </Project>
